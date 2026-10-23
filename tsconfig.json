@@ -24,5 +24,6 @@
     "allowImportingTsExtensions": true,
     "noEmit": true
   },
-  "exclude": ["dist"]
+  "include": ["src", "server.ts", "vite.config.ts"],
+  "exclude": ["dist", "node_modules", "app", "public"]
 }
