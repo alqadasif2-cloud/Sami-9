@@ -1,0 +1,97 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Health and diagnostic checks
+    match /_system_health/{document=**} {
+      allow read, write: if true;
+    }
+    match /health_test/{document=**} {
+      allow read, write: if true;
+    }
+
+    // User accounts and authentication
+    match /users/{userId} {
+      allow read, write: if true;
+    }
+    match /community_users/{userId} {
+      allow read, write: if true;
+    }
+
+    // Channels and messages
+    match /channels/{channelId} {
+      allow read, write: if true;
+
+      match /messages/{messageId} {
+        allow read, write: if true;
+      }
+    }
+    match /channel_messages/{messageId} {
+      allow read, write: if true;
+    }
+    match /chat_messages/{messageId} {
+      allow read, write: if true;
+    }
+
+    // Private messages & conversations
+    match /private_messages/{messageId} {
+      allow read, write: if true;
+    }
+    match /private_conversations/{conversationId} {
+      allow read, write: if true;
+
+      match /messages/{messageId} {
+        allow read, write: if true;
+      }
+    }
+
+    // Trading Challenges and Milestones
+    match /challenges/{challengeId} {
+      allow read, write: if true;
+
+      match /trades/{tradeId} {
+        allow read, write: if true;
+      }
+    }
+    match /user_challenges/{userId} {
+      allow read, write: if true;
+    }
+    match /trades/{tradeId} {
+      allow read, write: if true;
+    }
+    match /milestones/{milestoneId} {
+      allow read, write: if true;
+    }
+
+    // Stored files metadata and base64 media fallback
+    match /files/{fileId} {
+      allow read, write: if true;
+    }
+    match /media_files/{mediaId} {
+      allow read, write: if true;
+    }
+
+    // App Updates published by Owner
+    match /app_updates/{updateId} {
+      allow read, write: if true;
+    }
+
+    // Push Notifications and FCM Device Tokens
+    match /user_fcm_tokens/{tokenId} {
+      allow read, write: if true;
+    }
+    match /fcm_outbox/{jobId} {
+      allow read, write: if true;
+    }
+
+    // Subscriptions and audit logs
+    match /subscription_plans/{planId} {
+      allow read, write: if true;
+    }
+    match /subscription_audit_logs/{logId} {
+      allow read, write: if true;
+    }
+    match /subscription_consents/{consentId} {
+      allow read, write: if true;
+    }
+  }
+}

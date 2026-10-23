@@ -1,0 +1,13 @@
+{
+  "projectId": "majestic-interface-ksmzh",
+  "appId": "1:462035009117:web:ef127abfd25d8ff2ec17b4",
+  "apiKey": "AIzaSyCWSCiM0EVatqiBL5wUO8ZAfKcJHqud9dU",
+  "authDomain": "majestic-interface-ksmzh.firebaseapp.com",
+
+  "firestoreDatabaseId": "ai-studio-c1d1b606-9578-42a6-b7b2-17faaec47f72",
+  "storageBucket": "majestic-interface-ksmzh.firebasestorage.app",
+  "messagingSenderId": "462035009117",
+  "measurementId": "",
+  "oAuthClientId": "462035009117-i3ftofh5slm6rjifgtsib7954uv5k8ld.apps.googleusercontent.com",
+  "recaptchaSiteKey": ""
+}
