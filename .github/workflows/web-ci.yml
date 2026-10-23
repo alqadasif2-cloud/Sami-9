@@ -1,0 +1,75 @@
+name: Web CI & Build
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+concurrency:
+  group: web-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-test:
+    name: Build & Verify Web App
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: |
+          npm ci || npm install --legacy-peer-deps
+
+      - name: TypeScript Lint & Typecheck
+        run: |
+          npm run lint
+
+      - name: Build Production Frontend
+        run: |
+          npm run build
+
+      - name: Verify Distribution Output
+        run: |
+          if [ ! -f "dist/index.html" ]; then
+            echo "::error::dist/index.html was not generated!"
+            exit 1
+          fi
+          echo "Production build verified successfully."
+
+      - name: Smoke Test Backend Server
+        run: |
+          # Start the server in background for smoke testing
+          npx tsx server.ts &
+          SERVER_PID=$!
+          
+          # Wait up to 15 seconds for server to start
+          for i in {1..15}; do
+            if curl -s http://localhost:3000/api/health | grep -q "sami-fullstack-server"; then
+              echo "Server health check passed on attempt $i."
+              kill $SERVER_PID || true
+              exit 0
+            fi
+            sleep 1
+          done
+          
+          echo "::error::Server failed to start or did not respond to /api/health within 15s"
+          kill $SERVER_PID || true
+          exit 1
+
+      - name: Upload Web Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-dist
+          path: dist/
+          retention-days: 7
